@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Flights;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class FlightController extends Controller
 {
@@ -15,6 +17,9 @@ class FlightController extends Controller
     public function index()
     {
         //$flights = Flights::all();
+        $user = Auth::user();
+        $role = $user->getRoleNames();
+        $this->authorize('index', $role[0]);
         $flights = DB::table('flights')
             ->join('airports', 'flights.departure_id', '=', 'airports.id')
             ->join('airports as d', 'flights.destination_id', '=', 'd.id')
