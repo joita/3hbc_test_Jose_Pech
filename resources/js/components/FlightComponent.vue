@@ -78,6 +78,7 @@
                                 class="mb-2"
                                 v-bind="attrs"
                                 v-on="on"
+                                v-show="permisoInsert == true"
                                 >
                                 Agregar Flight
                                 </v-btn>
@@ -235,11 +236,11 @@
                         </v-toolbar>
                         </template>
                         <template v-slot:item.actions="{ item }">
-                            <v-btn x-small color="green"  @click="editItem(item)" dark>
+                            <v-btn x-small color="green"  @click="editItem(item)" dark v-show="permisoUpdate == true">
                                 Editar
                             </v-btn>
 
-                            <v-btn x-small color="red"  @click="deleteItem(item)" dark>
+                            <v-btn x-small color="red"  @click="deleteItem(item)" dark v-show="PermisoDelete == true">
                                 Eliminar
                             </v-btn>
                         </template>
@@ -298,6 +299,10 @@
                 menu2: false,
                 menu: false,
                 permisos: [],
+                permisoView: false,
+                permisoInsert: false,
+                permisoUpdate: false,
+                PermisoDelete: false,
                 urlRoot: 'http://localhost:8000/'
             }
         },
@@ -362,6 +367,17 @@
             listPermisos(){
                 axios.get(vmFligth.urlRoot+'permisos/flight', {}).then(response => {
                     vmFligth.permisos = response.data
+                    if(vmFligth.permisos.length > 0){
+                        vmFligth.permisoView = vmFligth.permisos[0].name == 'getFlight' ? true : false
+                        vmFligth.permisoInsert = vmFligth.permisos[1].name == 'createFlight' ? true : false
+                        vmFligth.permisoUpdate = vmFligth.permisos[2].name == 'updateFlight' ? true : false
+                        vmFligth.PermisoDelete = vmFligth.permisos[3].name == 'deleteFlight' ? true : false
+                    }else{
+                        vmFligth.permisoView = false
+                        vmFligth.permisoInsert = false
+                        vmFligth.permisoUpdate = false
+                        vmFligth.PermisoDelete = false
+                    }
                 }).catch(e => {
                     console.log(e);
                 });
@@ -417,10 +433,10 @@
         },
         mounted() {
             window.vmFligth = this
+            vmFligth.listPermisos()
             vmFligth.list()
             vmFligth.listAirline()
             vmFligth.listAirport()
-            vmFligth.listPermisos()
         }
     }
 </script>
