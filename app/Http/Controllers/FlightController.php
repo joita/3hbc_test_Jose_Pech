@@ -17,9 +17,7 @@ class FlightController extends Controller
     public function index()
     {
         //$flights = Flights::all();
-        $user = Auth::user();
-        $role = $user->getRoleNames();
-        $this->authorize('index', $role[0]);
+        //$user = Auth::user();
         $flights = DB::table('flights')
             ->join('airports', 'flights.departure_id', '=', 'airports.id')
             ->join('airports as d', 'flights.destination_id', '=', 'd.id')
@@ -92,5 +90,23 @@ class FlightController extends Controller
     {
         $datos = json_decode(file_get_contents('php://input'));
         return Flights::where('id', $datos->id)->delete();
+    }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function permisos()
+    {
+        $user = Auth::user();
+        $role = $user->getRoleNames();
+        $permisos = DB::table('role_has_permissions')
+            ->join('roles as r', 'role_has_permissions.role_id', '=', 'r.id')
+            ->join('permissions as p', 'role_has_permissions.permission_id', '=', 'p.id')
+            ->select('p.*')
+            ->where('r.name', '=', $role[0])
+            ->get();
+        return $permisos;
     }
 }

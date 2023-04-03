@@ -35,3 +35,4 @@ Route::get('/get/flight', [App\Http\Controllers\FlightController::class, 'index'
 Route::post('/create/flight', [App\Http\Controllers\FlightController::class, 'store'])->name('createFlight');
 Route::post('/update/flight', [App\Http\Controllers\FlightController::class, 'update'])->name('updateFlight');
 Route::post('/delete/flight', [App\Http\Controllers\FlightController::class, 'destroy'])->name('deleteFlight');
+Route::get('/permisos/flight', [App\Http\Controllers\FlightController::class, 'permisos'])->name('PermisosFlight');

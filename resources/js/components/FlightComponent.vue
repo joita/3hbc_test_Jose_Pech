@@ -297,6 +297,7 @@
                 airlines: [],
                 menu2: false,
                 menu: false,
+                permisos: [],
                 urlRoot: 'http://localhost:8000/'
             }
         },
@@ -358,6 +359,13 @@
                     console.log(e);
                 });
             },
+            listPermisos(){
+                axios.get(vmFligth.urlRoot+'permisos/flight', {}).then(response => {
+                    vmFligth.permisos = response.data
+                }).catch(e => {
+                    console.log(e);
+                });
+            },
             editItem (item) {
                 vmFligth.itemId = item.id
                 vmFligth.code = item.code
@@ -412,6 +420,7 @@
             vmFligth.list()
             vmFligth.listAirline()
             vmFligth.listAirport()
+            vmFligth.listPermisos()
         }
     }
 </script>
